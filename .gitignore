@@ -31,3 +31,4 @@ demo/report/stats.json
 !srrc/resize.js
 !src/window.js
 !src/DOM/*.js
+!src/vendor/**/*.js

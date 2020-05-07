@@ -1,5 +1,5 @@
 require('tns-core-modules/globals');
-import { TNSXMLHttpRequest, FileReader, Blob } from 'nativescript-http-async';
+import { TNSXMLHttpRequest, FileReader, Blob } from './vendor/http-async';
 import Document from './DOM/Document';
 import './window';
 import './resize';
