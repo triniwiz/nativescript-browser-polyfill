@@ -1,6 +1,6 @@
 # nativescript-browser-polyfill
 
-Browser polyfill for React Native
+Browser polyfill for NativeScript
 
 ### Installation
 
