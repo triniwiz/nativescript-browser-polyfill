@@ -113,7 +113,7 @@ var TNSXMLHttpRequest = (function () {
             'application/xml',
             'application/rss+xml',
             'text/html',
-            'text/xml'
+            'text/xml',
         ];
         this._status = Status.UNSENT;
         this._http = new http_1.Http();
@@ -194,7 +194,8 @@ var TNSXMLHttpRequest = (function () {
     });
     Object.defineProperty(TNSXMLHttpRequest.prototype, "responseXML", {
         get: function () {
-            var header = this.getResponseHeader('Content-Type') || this.getResponseHeader('content-type');
+            var header = this.getResponseHeader('Content-Type') ||
+                this.getResponseHeader('content-type');
             var contentType = header && header.toLowerCase();
             if (this.isTextContentType(contentType)) {
                 if (this._responseType === XMLHttpRequestResponseType.document) {
@@ -217,7 +218,8 @@ var TNSXMLHttpRequest = (function () {
         return result;
     };
     TNSXMLHttpRequest.prototype._setResponseType = function () {
-        var header = this.getResponseHeader('Content-Type') || this.getResponseHeader('content-type');
+        var header = this.getResponseHeader('Content-Type') ||
+            this.getResponseHeader('content-type');
         var contentType = header && header.toLowerCase();
         if (contentType) {
             if (contentType.indexOf('application/json') >= 0 ||
@@ -269,8 +271,7 @@ var TNSXMLHttpRequest = (function () {
         }
         return null;
     };
-    TNSXMLHttpRequest.prototype.overrideMimeType = function (mime) {
-    };
+    TNSXMLHttpRequest.prototype.overrideMimeType = function (mime) { };
     TNSXMLHttpRequest.prototype._addToStringOnResponse = function () {
         var _this = this;
         if (types.isNullOrUndefined(this.response)) {
@@ -281,9 +282,28 @@ var TNSXMLHttpRequest = (function () {
                 configurable: true,
                 enumerable: false,
                 writable: true,
-                value: function () { return _this.responseText; }
+                value: function () { return _this.responseText; },
             });
         }
+    };
+    TNSXMLHttpRequest.prototype._toJSString = function (data) {
+        var encodings = ['UTF-8', 'US-ASCII', 'ISO-8859-1', null];
+        var value;
+        var count = encodings.length;
+        for (var i = 0; i < count; i++) {
+            var encodingType = encodings[i];
+            if (encodingType === null) {
+                value = (new java.lang.String(data)).toString();
+                break;
+            }
+            try {
+                var encoding = java.nio.charset.Charset.forName(encodingType);
+                value = (new java.lang.String(data, encoding)).toString();
+                break;
+            }
+            catch (e) { }
+        }
+        return value;
     };
     TNSXMLHttpRequest.prototype.open = function (method, url, async, username, password) {
         if (async === void 0) { async = true; }
@@ -297,13 +317,13 @@ var TNSXMLHttpRequest = (function () {
             url: url,
             async: async,
             username: username,
-            password: password
+            password: password,
         };
         this._updateReadyStateChange(this.OPENED);
     };
     TNSXMLHttpRequest.prototype.setRequestHeader = function (header, value) {
         if (this._readyState !== this.OPENED) {
-            throw new Error('Failed to execute \'setRequestHeader\' on \'XMLHttpRequest\': The object\'s state must be OPENED.');
+            throw new Error("Failed to execute 'setRequestHeader' on 'XMLHttpRequest': The object's state must be OPENED.");
         }
         if (typeof this._headers === 'object') {
             this._headers[header] = value;
@@ -313,12 +333,14 @@ var TNSXMLHttpRequest = (function () {
         var _this = this;
         if (body === void 0) { body = null; }
         if (this._readyState !== this.OPENED) {
-            throw new Error('Failed to execute \'send\' on \'XMLHttpRequest\': The object\'s state must be OPENED');
+            throw new Error("Failed to execute 'send' on 'XMLHttpRequest': The object's state must be OPENED");
         }
         if (!this._headers['Accept']) {
             this._headers['Accept'] = '*/*';
         }
-        if (typeof this._request.method === 'string' && this._request.method.toLowerCase() === 'get' && typeof this._request.url === 'string') {
+        if (typeof this._request.method === 'string' &&
+            this._request.method.toLowerCase() === 'get' &&
+            typeof this._request.url === 'string') {
             var path = void 0;
             if (this._request.url.startsWith('file://')) {
                 path = this._request.url.replace('file://', '');
@@ -339,7 +361,7 @@ var TNSXMLHttpRequest = (function () {
                 lengthComputable: contentLength_1 > -1,
                 loaded: 0,
                 total: contentLength_1,
-                target: this
+                target: this,
             };
             var startEvent = new http_request_common_1.ProgressEvent('loadstart', this._lastProgress);
             if (this.onloadstart) {
@@ -372,7 +394,7 @@ var TNSXMLHttpRequest = (function () {
                     if (_this.responseType === XMLHttpRequestResponseType.json) {
                         try {
                             if (platform_1.isAndroid) {
-                                _this._responseText = new java.lang.String(data);
+                                _this._responseText = _this._toJSString(data);
                                 _this._response = JSON.parse(_this._responseText);
                             }
                             else {
@@ -398,8 +420,10 @@ var TNSXMLHttpRequest = (function () {
                             _this._responseText = _this._response = encodedString.toString();
                         }
                         else {
-                            var response = new java.lang.String(data);
-                            _this._responseText = _this._response = response ? response.toString() : "";
+                            var response = _this._toJSString(data);
+                            _this._responseText = _this._response = response
+                                ? response.toString()
+                                : '';
                         }
                     }
                     else if (_this.responseType === XMLHttpRequestResponseType.document) {
@@ -413,8 +437,10 @@ var TNSXMLHttpRequest = (function () {
                             _this._responseText = _this._response = encodedString.toString();
                         }
                         else {
-                            var response = new java.lang.String(data);
-                            _this._responseText = _this._response = response ? response.toString() : "";
+                            var response = _this._toJSString(data);
+                            _this._responseText = _this._response = response
+                                ? response
+                                : '';
                         }
                     }
                     else if (_this.responseType === XMLHttpRequestResponseType.arraybuffer) {
@@ -448,7 +474,7 @@ var TNSXMLHttpRequest = (function () {
                         lengthComputable: contentLength_1 > -1,
                         loaded: size,
                         total: contentLength_1,
-                        target: _this
+                        target: _this,
                     };
                     var progressEvent = new http_request_common_1.ProgressEvent('progress', _this._lastProgress);
                     if (_this.onprogress) {
@@ -484,17 +510,19 @@ var TNSXMLHttpRequest = (function () {
                 var contentLength = -1;
                 if (typeof _this._headers === 'object') {
                     if (_this._headers['Content-Length']) {
-                        contentLength = parseInt(_this._headers['Content-Length'], 10) || -1;
+                        contentLength =
+                            parseInt(_this._headers['Content-Length'], 10) || -1;
                     }
                     if (_this._headers['content-length']) {
-                        contentLength = parseInt(_this._headers['content-length'], 10) || -1;
+                        contentLength =
+                            parseInt(_this._headers['content-length'], 10) || -1;
                     }
                 }
                 _this._lastProgress = {
                     lengthComputable: contentLength > -1,
                     loaded: 0,
                     total: contentLength,
-                    target: _this
+                    target: _this,
                 };
                 var loadStartEvent = new http_request_common_1.ProgressEvent('loadstart', _this._lastProgress);
                 if (_this._upload && (method === 'post' || method === 'put')) {
@@ -511,7 +539,7 @@ var TNSXMLHttpRequest = (function () {
                     _this._headers = event.headers;
                 }
                 _this._updateReadyStateChange(_this.HEADERS_RECEIVED);
-            }
+            },
         };
         if (method === 'post' || method === 'put') {
             request.onProgress = function (event) {
@@ -528,9 +556,9 @@ var TNSXMLHttpRequest = (function () {
         if (this.timeout > 0) {
             request['timeout'] = this.timeout;
         }
-        this._currentRequest = this._http
-            .request(request);
-        this._currentRequest.then(function (res) {
+        this._currentRequest = this._http.request(request);
+        this._currentRequest
+            .then(function (res) {
             _this._setResponseType();
             _this._status = res.statusCode;
             _this._httpContent = res.content;
@@ -563,7 +591,7 @@ var TNSXMLHttpRequest = (function () {
                     }
                     else {
                         if (res.content instanceof java.nio.ByteBuffer) {
-                            _this._responseText = new java.lang.String(res.content.array());
+                            _this._responseText = _this._toJSString(res.content.array());
                             _this._response = JSON.parse(_this._responseText);
                         }
                     }
@@ -590,7 +618,7 @@ var TNSXMLHttpRequest = (function () {
                     }
                     else {
                         if (res.content instanceof java.nio.ByteBuffer) {
-                            _this._responseText = _this._response = new java.lang.String(res.content.array());
+                            _this._responseText = _this._response = _this._toJSString(res.content.array());
                         }
                     }
                 }
@@ -614,7 +642,7 @@ var TNSXMLHttpRequest = (function () {
                     }
                     else {
                         if (res.content instanceof java.nio.ByteBuffer) {
-                            _this._responseText = _this._response = new java.lang.String(res.content.array());
+                            _this._responseText = _this._response = _this._toJSString(res.content.array());
                         }
                     }
                 }
@@ -659,7 +687,8 @@ var TNSXMLHttpRequest = (function () {
                         _this.onabort();
                     }
                     var abortEvent = new http_request_common_1.ProgressEvent('abort', _this._lastProgress);
-                    if (_this._upload && (method === 'post' || method === 'put')) {
+                    if (_this._upload &&
+                        (method === 'post' || method === 'put')) {
                         _this._upload._emitEvent('abort', abortEvent);
                     }
                     _this.emitEvent('abort', abortEvent);
@@ -667,7 +696,8 @@ var TNSXMLHttpRequest = (function () {
                         _this.onloadend();
                     }
                     var _loadendEvent = new http_request_common_1.ProgressEvent('loadend', _this._lastProgress);
-                    if (_this._upload && (method === 'post' || method === 'put')) {
+                    if (_this._upload &&
+                        (method === 'post' || method === 'put')) {
                         _this._upload._emitEvent('loadend', _loadendEvent);
                     }
                     _this.emitEvent('loadend', _loadendEvent);
@@ -686,7 +716,8 @@ var TNSXMLHttpRequest = (function () {
                         _this.ontimeout();
                     }
                     var timeoutEvent = new http_request_common_1.ProgressEvent('timeout', _this._lastProgress);
-                    if (_this._upload && (method === 'post' || method === 'put')) {
+                    if (_this._upload &&
+                        (method === 'post' || method === 'put')) {
                         _this._upload._emitEvent('timeout', timeoutEvent);
                     }
                     _this.emitEvent('timeout', timeoutEvent);
@@ -696,7 +727,8 @@ var TNSXMLHttpRequest = (function () {
                         _this.onerror(error.message);
                     }
                     var errorEvent = new http_request_common_1.ProgressEvent('error', _this._lastProgress);
-                    if (_this._upload && (method === 'post' || method === 'put')) {
+                    if (_this._upload &&
+                        (method === 'post' || method === 'put')) {
                         _this._upload._emitEvent('error', errorEvent);
                     }
                     _this.emitEvent('error', errorEvent);
@@ -704,7 +736,8 @@ var TNSXMLHttpRequest = (function () {
                         _this.onloadend();
                     }
                     var loadendEvent = new http_request_common_1.ProgressEvent('loadend', _this._lastProgress);
-                    if (_this._upload && (method === 'post' || method === 'put')) {
+                    if (_this._upload &&
+                        (method === 'post' || method === 'put')) {
                         _this._upload._emitEvent('loadend', loadendEvent);
                     }
                     _this.emitEvent('loadend', loadendEvent);

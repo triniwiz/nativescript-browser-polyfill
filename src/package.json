@@ -1,6 +1,6 @@
 {
 	"name": "nativescript-browser-polyfill",
-	"version": "1.0.0-alpha1",
+	"version": "1.0.0-alpha2",
 	"description": "Browser polyfill for making NativeScript compatible with web libs like pixi.js, three.js, phaser.js",
 	"main": "browser-polyfill",
 	"typings": "index.d.ts",
@@ -24,7 +24,7 @@
 		"plugin.prepare": "npm run build undefined",
 		"clean": " && npx rimraf -- node_modules package-lock.json && npm i",
 		"pub.dev": "npm i nativescript-canvas-plugin@latest",
-		"local.dev": "cd ../../nativescript-canvas-plugin/src  && npm i  && cd -"
+		"local.dev": "npm i ../../nativescript-canvas-plugin/src"
 	},
 	"keywords": [
 		"NativeScript",
@@ -57,7 +57,8 @@
 		"semver": "^5.6.0"
 	},
 	"dependencies": {
-		"nativescript-canvas-plugin": "^0.3.0"
+		"local.dev": "^0.3.2",
+		"nativescript-canvas-plugin": "^0.4.1"
 	},
 	"bootstrapper": "nativescript-plugin-seed"
 }

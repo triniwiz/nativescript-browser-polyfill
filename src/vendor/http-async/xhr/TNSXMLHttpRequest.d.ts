@@ -53,6 +53,7 @@ export declare class TNSXMLHttpRequest {
     getResponseHeader(header: string): string;
     overrideMimeType(mime: string): void;
     private _addToStringOnResponse;
+    private _toJSString;
     open(method: string, url: string, async?: boolean, username?: string | null, password?: string | null): void;
     setRequestHeader(header: string, value: any): void;
     send(body?: any): void;
