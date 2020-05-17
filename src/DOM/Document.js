@@ -27,8 +27,19 @@ class Document extends Element {
         }
     }
 
-    createElementNS(tagName) {
-        const element = this.createElement(tagName);
+    createElementNS(...args) {
+        var name;
+        var namespaceURI;
+        if(Array.isArray(args) && args.length === 1){
+            name = args[0];
+        }else if(Array.isArray(args) && args.length > 1){
+            name = args[1];
+            namespaceURI = args[0];
+        }else {
+            name = args;
+        }
+        const element = this.createElement(name);
+        element.namespaceURI = namespaceURI;
         element.toDataURL = () => ({});
         return element;
     }

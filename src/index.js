@@ -8,7 +8,7 @@ import {
   requestAnimationFrame,
   cancelAnimationFrame,
 } from './raf/animation-frame';
-
+import {  TNSTextDecoder, TNSTextEncoder } from 'nativescript-canvas-plugin';
 global.document = global.document || new Document();
 Object.defineProperty(global, 'XMLHttpRequest', {
   value: TNSXMLHttpRequest,
@@ -42,3 +42,17 @@ if (!typeof global.cancelAnimationFrame) {
     writable: true,
   });
 }
+
+
+Object.defineProperty(global, 'TextEncoder', {
+  value: TNSTextEncoder,
+  configurable: true,
+  writable: true,
+});
+
+
+Object.defineProperty(global, 'TextDecoder', {
+  value: TNSTextDecoder,
+  configurable: true,
+  writable: true,
+});

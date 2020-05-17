@@ -135,3 +135,4 @@ if (global.document) {
 
 global.window.setTimeout = setTimeout;
 global.window.setInterval = setInterval;
+global.window.requestAnimationFrame = global.requestAnimationFrame = requestAnimationFrame;

@@ -28,7 +28,7 @@ if (!global.performance || !global.performance.now) {
         },
         now() {
             if (isIOS) {
-                return CACurrentMediaTime() / 1000;
+                return CACurrentMediaTime() * 1000;
             }
 
             return java.lang.System.nanoTime() / 1000000;

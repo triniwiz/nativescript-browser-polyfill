@@ -80,13 +80,14 @@ var TNSXMLHttpRequestUpload = (function () {
         this._listeners.set(eventName, handlers);
     };
     TNSXMLHttpRequestUpload.prototype._emitEvent = function (eventName) {
+        var _this = this;
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
         }
         var handlers = this._listeners.get(eventName) || [];
         handlers.forEach(function (handler) {
-            handler.apply(void 0, args);
+            handler.apply.apply(handler, [_this].concat(args));
         });
     };
     return TNSXMLHttpRequestUpload;
@@ -340,7 +341,7 @@ var TNSXMLHttpRequest = (function () {
         }
         if (typeof this._request.method === 'string' &&
             this._request.method.toLowerCase() === 'get' &&
-            typeof this._request.url === 'string') {
+            typeof this._request.url === 'string' && !this._request.url.startsWith('http')) {
             var path = void 0;
             if (this._request.url.startsWith('file://')) {
                 path = this._request.url.replace('file://', '');
@@ -468,7 +469,7 @@ var TNSXMLHttpRequest = (function () {
                         }
                     }
                     else {
-                        size = data & data.length;
+                        size = data ? data.length : 0;
                     }
                     _this._lastProgress = {
                         lengthComputable: contentLength_1 > -1,
@@ -762,13 +763,14 @@ var TNSXMLHttpRequest = (function () {
         this._listeners.set(eventName, handlers);
     };
     TNSXMLHttpRequest.prototype.emitEvent = function (eventName) {
+        var _this = this;
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
         }
         var handlers = this._listeners.get(eventName) || [];
         handlers.forEach(function (handler) {
-            handler.apply(void 0, args);
+            handler.apply.apply(handler, [_this].concat(args));
         });
     };
     TNSXMLHttpRequest.prototype.dispatchEvent = function (event) {
@@ -979,6 +981,7 @@ var FileReader = (function () {
         });
     };
     FileReader.prototype.emitEvent = function (eventName) {
+        var _this = this;
         var args = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             args[_i - 1] = arguments[_i];
@@ -988,7 +991,7 @@ var FileReader = (function () {
         }
         var handlers = this._listeners.get(eventName) || [];
         handlers.forEach(function (handler) {
-            handler.apply(void 0, args);
+            handler.apply(void 0, [_this].concat(args));
         });
     };
     FileReader.prototype.addEventListener = function (eventName, handler) {

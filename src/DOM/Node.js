@@ -11,8 +11,8 @@ Observable.prototype.removeListener = function (eventNames, callback, thisArg) {
 Observable.prototype.emit = function (eventNames, thisArg) {
   this.notify({
     eventName: eventNames,
-    object: null,
-  })
+    object: null
+  });
 };
 
 class Node {
@@ -46,25 +46,27 @@ class Node {
     }
   }
 
-  addEventListener(eventName, listener) {
+  addEventListener(eventName, listener, thisArg) {
     this._checkEmitter();
+    thisArg = thisArg || this;
     if (this.emitter.on) {
-      this.emitter.on(eventName, listener);
+      this.emitter.on(eventName, listener, thisArg);
     } else if (this.emitter.addEventListener) {
-      this.emitter.addEventListener(eventName, listener);
+      this.emitter.addEventListener(eventName, listener, thisArg);
     } else if (this.emitter.addListener) {
-      this.emitter.addListener(eventName, listener);
+      this.emitter.addListener(eventName, listener, thisArg);
     }
   }
 
-  removeEventListener(eventName, listener) {
+  removeEventListener(eventName, listener, thisArg) {
     this._checkEmitter();
+    thisArg = thisArg || this;
     if (this.emitter.off) {
-      this.emitter.off(eventName, listener);
+      this.emitter.off(eventName, listener, thisArg);
     } else if (this.emitter.removeEventListener) {
-      this.emitter.removeEventListener(eventName, listener);
+      this.emitter.removeEventListener(eventName, listener, thisArg);
     } else if (this.emitter.removeListener) {
-      this.emitter.removeListener(eventName, listener);
+      this.emitter.removeListener(eventName, listener, thisArg);
     }
   }
 
