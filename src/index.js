@@ -1,4 +1,4 @@
-require('tns-core-modules/globals');
+require('@nativescript/core/globals');
 import { TNSXMLHttpRequest, FileReader, Blob } from './vendor/http-async';
 import Document from './DOM/Document';
 import './window';
@@ -9,7 +9,7 @@ import {
   cancelAnimationFrame,
 } from './raf/animation-frame';
 import {  TNSTextDecoder, TNSTextEncoder } from 'nativescript-canvas-plugin';
-global.document = global.document || new Document();
+global.document = global.window.document = global.document || new Document();
 Object.defineProperty(global, 'XMLHttpRequest', {
   value: TNSXMLHttpRequest,
   configurable: true,

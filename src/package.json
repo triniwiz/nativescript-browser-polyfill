@@ -1,6 +1,6 @@
 {
 	"name": "nativescript-browser-polyfill",
-	"version": "1.0.0-alpha4",
+	"version": "1.0.0-alpha6",
 	"description": "Browser polyfill for making NativeScript compatible with web libs like pixi.js, three.js, phaser.js",
 	"main": "browser-polyfill",
 	"typings": "index.d.ts",
@@ -48,16 +48,19 @@
 	"license": "Apache-2.0",
 	"homepage": "https://github.com/triniwiz/nativescript-browser-polyfill",
 	"devDependencies": {
-		"tns-core-modules": "^6.0.0",
-		"tns-platform-declarations": "^6.0.0",
-		"typescript": "~3.4.5",
+		"@nativescript/core": "^6.5.4",
 		"prompt": "^1.0.0",
 		"rimraf": "^2.6.3",
+		"semver": "^5.6.0",
+		"tns-platform-declarations": "^6.5.4",
 		"tslint": "^5.12.1",
-		"semver": "^5.6.0"
+		"typescript": "~3.8.3"
 	},
 	"peerDependencies": {
-		"nativescript-canvas-plugin": "~0.5.0"
+		"nativescript-canvas-plugin": "^0.8.0"
 	},
-	"bootstrapper": "nativescript-plugin-seed"
+	"bootstrapper": "nativescript-plugin-seed",
+	"dependencies": {
+		"xmldom-qsa": "^1.0.3"
+	}
 }

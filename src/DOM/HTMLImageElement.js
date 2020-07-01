@@ -1,7 +1,6 @@
 import Element from "./Element";
-import { isIOS } from "tns-core-modules/platform";
+import { isIOS } from "@nativescript/core/platform";
 import * as fs from "tns-core-modules/file-system";
-import { ImageSource } from "tns-core-modules/image-source";
 import { TNSImageAsset } from 'nativescript-canvas-plugin';
 const b64Extensions = {
     "/": "jpg",
@@ -139,12 +138,12 @@ class HTMLImageElement extends Element {
                 this.complete = false;
                 this._asset = new TNSImageAsset();
                 this._asset.loadFileAsync(this.src)
-                .then(()=>{
+                .then(() => {
                     this.width = this._asset.width;
                     this.height = this._asset.height;
                     this.complete = true;
                 })
-                .catch(e =>{
+                .catch(e => {
                     this.emitter.emit("error", { target: this });
                 });
             } else {
