@@ -3,15 +3,22 @@ import "./performance";
 import HTMLImageElement from "./DOM/HTMLImageElement";
 import HTMLCanvasElement from "./DOM/HTMLCanvasElement";
 import HTMLVideoElement from "./DOM/HTMLVideoElement";
-import { fromObject } from "tns-core-modules/data/observable";
-import { device } from "tns-core-modules/platform";
-import { TNSCanvasRenderingContext2D as CanvasRenderingContext2D , TNSWebGLRenderingContext as WebGLRenderingContext} from "nativescript-canvas-plugin";
-global.CANVAS_RENDERER = "false";
+import XMLDocument from './DOM/XMLDocument';
+import {fromObject} from "@nativescript/core/data/observable";
+import {device} from "@nativescript/core/platform";
+import * as app from '@nativescript/core/application';
+import {View} from '@nativescript/core/ui/core/view';
+import {
+    TNSCanvasRenderingContext2D as CanvasRenderingContext2D,
+    TNSWebGLRenderingContext as WebGLRenderingContext
+} from "nativescript-canvas-plugin";
+
+global.CANVAS_RENDERER = "true";
 global.WEBGL_RENDERER = "true";
 global.window = global.window || {
     console: console,
     WEBGL_RENDERER: "true",
-    CANVAS_RENDERER: "false"
+    CANVAS_RENDERER: "true"
 };
 
 global.window.HTMLImageElement = global.HTMLImageElement =
@@ -91,7 +98,9 @@ global.window.removeEventListener = global.removeEventListener = (
     }
 };
 
-//window.DOMParser = window.DOMParser || require('xmldom-qsa').DOMParser;
+global.window.DOMParser = global.DOMParser = window.DOMParser || require('xmldom-qsa').DOMParser;
+
+global.window.XMLDocument = global.XMLDocument = XMLDocument;
 
 const agent = "chrome";
 global.window.navigator = global.navigator =
@@ -115,7 +124,7 @@ global.window.navigator.standalone = global.navigator.standalone =
 
 global.window["chrome"] = global["chrome"] = global[
     "chrome"
-] || {
+    ] || {
     extension: {},
 };
 ///https://www.w3schools.com/js/js_window_location.asp
@@ -129,10 +138,25 @@ global.window.location = global.location = global
 };
 
 if (global.document) {
-    global.window.document = global.document.readyState =
-        "complete";
+    global.document.readyState = "complete";
 }
 
 global.window.setTimeout = setTimeout;
 global.window.setInterval = setInterval;
 global.window.requestAnimationFrame = global.requestAnimationFrame = requestAnimationFrame;
+global.window.getComputedStyle = function (element, pseudoEltOptional) {
+    const obj = {};
+    obj.getPropertyValue = function (prop) {
+        if (element instanceof View) {
+            let val = element.style.get(prop);
+            if ((val !== undefined || val != null) && typeof val.value && typeof val.unit) {
+                if (typeof val.value && typeof val.unit) {
+                    return `${val.value}${val.unit}`;
+                }
+            }
+            return val;
+        }
+        return null;
+    }
+    return obj;
+}
