@@ -1,5 +1,7 @@
 # nativescript-browser-polyfill
 
+**The source is now managed at https://github.com/NativeScript/canvas**
+
 Browser polyfill for NativeScript
 
 ### Installation
